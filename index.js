@@ -33,31 +33,37 @@ class RtpSession {
 		this._hdr[10] = this._info.ssrc >>> 8 & 0xFF
 		this._hdr[11] = this._info.ssrc & 0xFF
 
+		this._socket = dgram.createSocket("udp4")
 	}
 
-	set_local_end_point(ip, port, cb) {
-		this._socket = dgram.createSocket("udp4");
-		this._socket.bind(ip, port, (err) => {
-			if(err) {
-				cb(err)
-				return
+	set_socket(socket) {
+		if(this._socket != socket) {
+			this._socket.close()
+		}
+
+		this._socket = socket
+
+		this._info.local_ip = this._socket.address().address
+		this._info.local_port = this._socket.address().port
+
+		this._socket.on('message', (msg, rinfo) => {
+			if(rinfo.address != this._info.remote_ip || rinfo.port != this._info.remote_port) {
+				// ignore packet out of RTP session
 			}
 
-			this._info.local_ip = this._socket.address().address
-			this._info.local_port = this._socket.address().port
+			// TODO: must check if message is really an RTP packet
 
-			this._socket.on('message', (msg, rinfo) => {
-				if(rinfo.address != this._info.remote_ip || rinfo.port != this._info.remote_port) {
-					// ignore packet out of RTP session
-				}
+			var data = msg.slice(12) // assume 12 bytes header for now
+			this._socket.emit('data', data) 
+		})
 
-				// TODO: must check if message is really an RTP packet
+	}
 
-				var data = msg.slice(12) // assume 12 bytes header for now
-				this._socket.emit('data', data) 
-			})
+	set_local_end_point(ip, port) {
+		this._socket.bind(port, ip, (err) => {
+			if(err) return
 
-			cb(err)
+			this.set_socket(this._socket)
 		})
 	}
 
