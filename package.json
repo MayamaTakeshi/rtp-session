@@ -1,0 +1,24 @@
+{
+  "name": "rtp-session",
+  "version": "1.0.0",
+  "description": "Real-time Transport Protocol session library",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MayamaTakeshi/rtp-session.git"
+  },
+  "keywords": [
+    "Real-time",
+    "Transport",
+    "Protocol"
+  ],
+  "author": "MayamaTakeshi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MayamaTakeshi/rtp-session/issues"
+  },
+  "homepage": "https://github.com/MayamaTakeshi/rtp-session#readme"
+}
