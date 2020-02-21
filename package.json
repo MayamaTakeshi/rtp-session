@@ -1,10 +1,10 @@
 {
   "name": "rtp-session",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Real-time Transport Protocol session library",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -20,5 +20,11 @@
   "bugs": {
     "url": "https://github.com/MayamaTakeshi/rtp-session/issues"
   },
-  "homepage": "https://github.com/MayamaTakeshi/rtp-session#readme"
+  "homepage": "https://github.com/MayamaTakeshi/rtp-session#readme",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-bytes": "^0.1.2",
+    "mocha": "^7.0.1"
+  },
+  "dependencies": {}
 }

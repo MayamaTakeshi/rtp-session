@@ -3,10 +3,6 @@ const dgram = require("dgram")
 class RtpSession {
 	constructor(opts) {
 		this._info = {
-			local_ip: opts.local_ip ? opts.local_ip : '127.0.0.1',
-			local_port: opts.local_port,
-			remote_ip: opts.remote_ip ? opts.remote_ip : '127.0.0.1',
-			remote_port: opts.remote_port,
 			payload_type: opts.payload_type ? opts.payload_type : 0,
 			ssrc: opts.ssrc ? opts.ssrc : 0x1234678,
 
@@ -14,7 +10,7 @@ class RtpSession {
 			time_stamp: 160,
 		}
 
-		console.log(this._info)
+		//console.log(this._info)
 
 		var version = 2
 		var padding = 0
@@ -37,19 +33,37 @@ class RtpSession {
 		this._hdr[10] = this._info.ssrc >>> 8 & 0xFF
 		this._hdr[11] = this._info.ssrc & 0xFF
 
-		this._socket = dgram.createSocket("udp4");
-		this._socket.bind(this._info.local_port, this._info.local_ip)
+	}
 
-		this._socket.on('message', (msg, rinfo) => {
-			if(rinfo.address != this._info.remote_ip || rinfo.port != this._info.remote_port) {
-				// ignore packet out of RTP session
+	set_local_end_point(ip, port, cb) {
+		this._socket = dgram.createSocket("udp4");
+		this._socket.bind(ip, port, (err) => {
+			if(err) {
+				cb(err)
+				return
 			}
 
-			// TODO: must check if message is really an RTP packet
+			this._info.local_ip = this._socket.address().address
+			this._info.local_port = this._socket.address().port
 
-			var data = msg.slice(12) // assume 12 bytes header for now
-			this._socket.emit('data', data) 
+			this._socket.on('message', (msg, rinfo) => {
+				if(rinfo.address != this._info.remote_ip || rinfo.port != this._info.remote_port) {
+					// ignore packet out of RTP session
+				}
+
+				// TODO: must check if message is really an RTP packet
+
+				var data = msg.slice(12) // assume 12 bytes header for now
+				this._socket.emit('data', data) 
+			})
+
+			cb(err)
 		})
+	}
+
+	set_remote_end_point(ip, port) {
+		this._info.remote_ip = ip
+		this._info.remote_port = port
 	}
 
 	get info() {
@@ -76,6 +90,10 @@ class RtpSession {
 		buf[7] = time_stamp & 0xFF
 	
         this._socket.send(buf, 0, buf.length, this._info.remote_port, this._info.remote_ip)
+	}
+
+	close() {
+		this._socket.close()
 	}
 
 	on(evt, cb) {
