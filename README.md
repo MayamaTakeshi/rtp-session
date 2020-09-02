@@ -5,11 +5,11 @@ A simple RTP (Real-time Transport Protocol) session library.
 There is a sample in examples/dtmf_detection that creates two RTP endpoints and transmit DTMF tones over it.
 To test with it start receiver.js with:
 ```
-  node receiver.js LOCAL__IP LOCAL_PORT
+  node receiver.js LOCAL_IP LOCAL_PORT
 ```
 and then start sender.js like this:
 ```
-  node sender.js LOCAL__IP REMOTE_IP REMOTE_PORT
+  node sender.js LOCAL_IP REMOTE_IP REMOTE_PORT
 ```
 
 Ex:
