@@ -37,3 +37,6 @@ $ node sender.js 127.0.0.1 127.0.0.1 8890 0123456789ABCD
 tone stream finished
 ```
 
+Obs: this is a simple example and actually doesn't do any data encoding (we set payload_type=0 in the example code but we are not actually sending u-law packets).
+
+
