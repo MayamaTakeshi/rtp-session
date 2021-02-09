@@ -1,5 +1,4 @@
 const ToneStream = require('tone-stream')
-const DtmfDetectionStream = require('dtmf-detection-stream')
 const RtpSession = require('../../index.js')
 
 const args = process.argv
