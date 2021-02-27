@@ -8,7 +8,7 @@ if(args.length != 7) {
 Invalid Number of arguments. 
 
 Parameters: local_ip local_port remote_ip remote_port dtmf_string
-Ex:         127.0.0.1 127.0.0.1 8890 01234567890abcdef
+Ex:         127.0.0.1 127.0.0.1 8890 0123456789abcdef
 `)
 
 	process.exit(1)
