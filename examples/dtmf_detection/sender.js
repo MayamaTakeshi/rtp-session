@@ -3,11 +3,11 @@ const RtpSession = require('../../index.js')
 
 const args = process.argv
 
-if(args.length != 6) {
+if(args.length != 7) {
 	console.log(`
 Invalid Number of arguments. 
 
-Parameters: local_ip remote_ip remote_port dtmf_string
+Parameters: local_ip local_port remote_ip remote_port dtmf_string
 Ex:         127.0.0.1 127.0.0.1 8890 01234567890abcdef
 `)
 
@@ -15,9 +15,10 @@ Ex:         127.0.0.1 127.0.0.1 8890 01234567890abcdef
 }
 
 const local_ip = process.argv[2]
-const remote_ip = process.argv[3]
-const remote_port = process.argv[4]
-const dtmf_string = process.argv[5]
+const local_port = parseInt(process.argv[3])
+const remote_ip = process.argv[4]
+const remote_port = parseInt(process.argv[5])
+const dtmf_string = process.argv[6]
 
 const re = /[0-9a-dA-D]+/
 if(!dtmf_string.match(re)) {
@@ -45,7 +46,7 @@ const rs_args = {
 }
 
 const rs = new RtpSession(rs_args)
-rs.set_local_end_point(local_ip, null)
+rs.set_local_end_point(local_ip, local_port)
 
 rs.on('error', err => {
 	console.log(err)
