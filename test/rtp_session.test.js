@@ -35,6 +35,7 @@ describe('rtp-session', function() {
 			var marker_bit = 1
 
 			rs2.on('data', data => {
+				console.log("rs2 on data")
 				assert.equalBytes(data, payload)
 
 				rs1.close()						
@@ -44,9 +45,18 @@ describe('rtp-session', function() {
 			})
 
 			rs2.on('listening', () => {
+				console.log('rs2 on listening')
+				console.log(rs2.info.local_ip, rs2.info.local_port)
 				rs1.set_remote_end_point(rs2.info.local_ip, rs2.info.local_port)
 				rs1.send_payload(payload, marker_bit, payload_type)
 			})
+
+			rs1.on('listening', () => {
+				console.log('rs1 on listening')
+				console.log(rs1.info.local_ip, rs1.info.local_port)
+				rs2.set_remote_end_point(rs1.info.local_ip, rs1.info.local_port)
+			})
+
 		})
 	})
 })
