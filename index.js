@@ -10,6 +10,8 @@ class RtpSession {
             time_stamp: 160,
         }
 
+        this._preserve_headers = opts.preserve_headers || false
+
         //console.log(this._info)
 
         var version = 2
@@ -54,7 +56,7 @@ class RtpSession {
 
             // TODO: must check if message is really an RTP packet
 
-            var data = msg.slice(12) // assume 12 bytes header for now
+            var data = this._preserve_headers ? msg : msg.slice(12) // assume 12 bytes header for now
             this._socket.emit('data', data) 
         })
 
